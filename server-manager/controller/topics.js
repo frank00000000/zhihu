@@ -3,17 +3,25 @@ const { TopicModel } = require('../model/toppics')
 
 // 获取话题模块列表 get /topics/
 exports.getTopicsList = async (req, res, next) => {
+    // 分页器功能实现 
+    //  1.获取当前页数,转换成number类型.当前页数最小为 1
+     const page = Math.Max( req.query.page * 1,1)
+
+
     try {
-        //1.查询所有话题列表
-        const topicList = await TopicModel.find()
+       
+        // 模块功能的实现
+        //1.查询所有话题列表 limit:显示条数 skip：跳过条数
+        const topicList = await TopicModel.find().limit(3)
+        console.log("topicList =" + topicList);
         // 2.获取长度为空 返回失败
         if (!topicList.length) return res.status(400).json({
             code: 400,
             msg: "获取话题列表失败"
         })
         //3.获取话题返回成功
-        res.status(400).json({
-            code: 400,
+        res.status(200).json({
+            code: 200,
             msg: "获取话题列表成功",
             data: topicList
         })
@@ -26,8 +34,8 @@ exports.getTopicsList = async (req, res, next) => {
 exports.getTopic = async (req, res, next) => {
     //1.获取指定查询 话题名字
     const { fields = "" } = req.query
-    
-    const selectFields = fields.split(";").filter(f=>f).map(f => ` +${f}`).join("")
+
+    const selectFields = fields.split(";").filter(f => f).map(f => ` +${f}`).join("")
     try {
         console.log(selectFields);
         // 1.获取指定话题传入的id，并且显示 selectFields 传入过来的隐藏字段
@@ -81,7 +89,6 @@ exports.createTopic = async (req, res, next) => {
 exports.updateTopic = async (req, res, next) => {
     // 1.获取传入的 topicId
     let topicId = req.params.id
-    console.log("翻译翻译");
     try {
         //2.查询数据 topic 表，topicId是否存在 =》 存在将body传入进去
         const data = await TopicModel.findByIdAndUpdate(topicId, req.body)
