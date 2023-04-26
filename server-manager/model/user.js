@@ -94,11 +94,11 @@ const userSchema = new mongoose.Schema({
     },
     // 关注与粉丝部分
     following: {
-        type: [{
+        type: [{ 
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
-        }],
-        select: false
+          }],
+          select: false
     }
 })
 
@@ -127,7 +127,7 @@ function userValidator(data) {
             "any.required": "缺少必要的 email",
             "string.email": "email 格式错误",
             "string.min": "name最少为6个字符",
-            "string.min": "name最多为30个字符",
+            "string.max": "name最多为30个字符",
         }),
         name: Joi.string().min(2).max(20).required().messages({
             "any.required": "缺少必选参数name",
@@ -189,9 +189,9 @@ function userValidator(data) {
         // 关注模块
         following: Joi.array().items(
             Joi.object().keys({
-                type: Joi.objectId()
+              type: Joi.objectId()
             })
-        ).messages({
+         ).messages({
             "array.base": "following 必须为数组类型",
         })
     })

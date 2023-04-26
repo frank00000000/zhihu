@@ -163,6 +163,7 @@ exports.deleteUser = async (req, res, next) => {
 // 获取关注列表 get "/:id/following"
 exports.listFollowing = async (req, res, next) => {
     try {
+        // 获取id
         let userId = req.params.id
         const user = await User.findById(userId).select("+following").populate("following")
         //获取失败
@@ -185,20 +186,85 @@ exports.listFollowing = async (req, res, next) => {
 }
 
 // 关注 put "/following/:id"
-exports.follow = (req, res, next) => {
+exports.follow = async (req, res, next) => {
     try {
-        res.send("222")
+        //  使用 token 的用户_id 去关注 params传入的id
+        // 1.获取userData 
+        let userId = req.userData._id
+        // 
+        const user = await User.findById(userId.toString()).select("+following")
+        // 2.如果关注过了，直接return
+        if (user.following.map(id => id.toString()).includes(req.params.id)) {
+            return res.status(400).json({
+                code: 400,
+                msg: "已关注 关注失败"
+            })
+        }
+
+        // 3.如果没有关注，我们再关注
+        user.following.push(req.params.id)
+        await user.save()
+        res.status(200).json({
+            code: 200,
+            msg: `关注成功`,
+            data: user
+        })
+
 
     } catch (error) {
         next(error)
     }
 }
 // 取消关注 delete "/following/:id"
-exports.unfollow = (req, res, next) => {
+exports.unfollow = async (req, res, next) => {
     try {
-        // await User.findById()
-        res.send("delete")
+        //1. 拿到token解析后的id
+        const userId = req.userData._id
+        //2. 查询 token 解析后 id 的粉丝集合
+        const user = await User.findById(userId.toString()).select("+following")
+        //3. 获取所关注的用户索引
+        const index = user.following.map(id => id.toString()).indexOf(req.params.id)
+
+        if (index == -1) {
+            return res.status(400).json({
+                code: 400,
+                msg: "用户未关注 取消关注失败"
+            })
+        }
+        // 4.已经关注，就取消操作
+        const cancel = user.following.splice(index, 1)
+        await user.save()
+        res.status(200).json({
+            code: 200,
+            msg: "取消关注成功",
+            data: cancel
+        })
+
     } catch (error) {
         next(error)
     }
 }
+
+// 获取某个用户的粉丝表 get /:id/followers
+exports.listFollowers = async (req, res, next) => {
+    try {
+        //1.查询 对应id的粉丝列表
+        const id = req.params.id
+        // populate将用户数据展示出来
+        const user = await User.findOne({ _id: id }).select("+following").populate("following")
+        // 2.查询失败 返回对应失败的消息
+        if (!user) return res.status(400).json({
+            code: 400,
+            msg: "查询粉丝列表失败"
+        })
+        //3.查询成功 返回成功的信息
+        res.status(200).json({
+            code: 200,
+            msg: "查询粉丝列表成功",
+            data: user.following
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+

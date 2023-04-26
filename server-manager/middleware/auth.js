@@ -1,14 +1,16 @@
+// jwt 中间件
 // 引入jwt
 const jwt = require("jsonwebtoken");
 const config = require('../config')
 
 module.exports = (req,res,next)=>{
+  // token 验证 
   // 前端在请求接口的时候，需要在header，带上我们后端生成的token
 
-  // 1.保存数据（token）
+  // 1.保存token（token）
   const token = req.header("authorization")
 
-  // 2.检测的时候存在token
+  // 2.检测是否存在token
 if(!token){
   return res.status(400).json({
       code:400,
