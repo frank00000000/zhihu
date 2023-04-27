@@ -62,21 +62,22 @@ const userSchema = new mongoose.Schema({
     },
     // 居住地
     locations: {
-        type: [{ type: String }],
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Topic" }],
         select: false
 
     },
     // 行业
     business: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Topic",
         select: false
 
     },
     // 职业经历
     employments: {
         type: [{
-            company: { type: String, },
-            job: { type: String }
+            company: { type: mongoose.Schema.Types.ObjectId, ref: "Topic" },
+            job: { type: mongoose.Schema.Types.ObjectId, ref: "Topic" }
         }],
         select: false
 
@@ -84,8 +85,8 @@ const userSchema = new mongoose.Schema({
     // 教育经历
     educations: {
         type: [{
-            school: { type: String },
-            major: { type: String },
+            school: { type: mongoose.Schema.Types.ObjectId, ref: "Topic" },
+            major: { type: mongoose.Schema.Types.ObjectId, ref: "Topic" },
             diploma: { type: Number, enum: [1, 2, 3, 4, 5] },
             entrance_year: { type: Number },
             graduation_year: { type: Number }
@@ -94,11 +95,11 @@ const userSchema = new mongoose.Schema({
     },
     // 关注与粉丝部分
     following: {
-        type: [{ 
+        type: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
-          }],
-          select: false
+        }],
+        select: false
     }
 })
 
@@ -154,18 +155,18 @@ function userValidator(data) {
             "string.max": "headline 最多100个字符"
         }),
         // 居住地
-        locations: Joi.array().items(Joi.string()).messages({
+        locations: Joi.array().items(Joi.objectId()).messages({
             "array.base": "locations 必须是 array 数组",
-            "string.base": "数组中必须传入 string 类型",
+            "string.pattern.name": "数组中必须传入 objectId 类型",
         }),
         // 行业
-        business: Joi.string().messages({
-            "string.base": "business 必须是 string 类型",
+        business: Joi.objectId().messages({
+            "string.base": "business 必须是 objectId 类型",
         }),
         // 职业经历
         employments: Joi.array().items(Joi.object().keys({
-            company: Joi.string(),
-            job: Joi.string()
+            company: Joi.objectId(),
+            job: Joi.objectId()
         })).messages({
             "array.base": "employments 必须是一个 数组",
             "object:unknown": "传入的数据有误"
@@ -173,8 +174,8 @@ function userValidator(data) {
         // 教育经历
         educations: Joi.array().items(
             Joi.object().keys({
-                school: Joi.string(),
-                major: Joi.string(),
+                school: Joi.objectId(),
+                major: Joi.objectId(),
                 diploma: Joi.number().valid(1, 2, 3, 4, 5),
                 entrance_year: Joi.number(),
                 graduation_year: Joi.number()
@@ -183,15 +184,15 @@ function userValidator(data) {
             "array.base": "employments 必须是一个 数组",
             "object:unknown": "传入的数据有误",
             "any.only": "diploma 只能从 1,2,3,4,5 选取",
-            "string.base": "school 和 major 只能是 string 类型",
+            "string.base": "school 和 major 只能是 objectId 类型",
             "number.base": "entrance_year 与 graduation_year 只能是number类型"
         }),
         // 关注模块
         following: Joi.array().items(
             Joi.object().keys({
-              type: Joi.objectId()
+                type: Joi.objectId()
             })
-         ).messages({
+        ).messages({
             "array.base": "following 必须为数组类型",
         })
     })

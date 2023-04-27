@@ -76,10 +76,21 @@ exports.getUser = async (req, res, next) => {
         //1. 获取传入的id参数和query参数
         let userId = req.params.id
         const { field = "" } = req.query;
+        // 根据用户返回的字段，显示用户需要的字段 //返回值 employments.job:"xxdhak0fo646xxx"
         const selectFields = field.split(";").filter(f => f).map(item => '+' + item).join(' ')
 
-        // 2.查询用户  实现用户的选择查询
+        // 根据用户返回的字段，显示id在数据库中对应的内容 //返回值  employments.job:"工作"
+        const populateStr = field.split(";").filter(f => f).map(item => {
+            if (item == "employments") return "employments.company employments.job"
+            if (item == "educations") return "educations.school educations.major"
+            return item
+        }).join(' ')
+
+        // 2.查询用户根据 id 实现用户的选择查询 
+        // select 显示用户需要的字段
+        // populate 展示对应 id 中的所有字段
         let user = await User.findById(userId).select(selectFields)
+            .populate(populateStr)
 
         // 3.如果没有查询到用户返回失败的响应
         if (!user) return res.status(400).json({
