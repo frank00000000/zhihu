@@ -171,7 +171,7 @@ exports.deleteUser = async (req, res, next) => {
     }
 }
 
-// 获取关注列表 get "/:id/following"
+// 获取关注列表 get "/user/:id/following"
 exports.listFollowing = async (req, res, next) => {
     try {
         // 获取id
@@ -196,7 +196,7 @@ exports.listFollowing = async (req, res, next) => {
 
 }
 
-// 关注 put "/following/:id"
+// 关注 put "/user/following/:id"
 exports.follow = async (req, res, next) => {
     try {
         //  使用 token 的用户_id 去关注 params传入的id
@@ -226,7 +226,7 @@ exports.follow = async (req, res, next) => {
         next(error)
     }
 }
-// 取消关注 delete "/following/:id"
+// 取消关注 delete "/user/following/:id"
 exports.unfollow = async (req, res, next) => {
     try {
         //1. 拿到token解析后的id
@@ -256,7 +256,7 @@ exports.unfollow = async (req, res, next) => {
     }
 }
 
-// 获取某个用户的粉丝表 get /:id/followers
+// 获取某个用户的粉丝表 get /user/:id/followers
 exports.listFollowers = async (req, res, next) => {
     try {
         //1.查询 对应id的粉丝列表
@@ -279,3 +279,94 @@ exports.listFollowers = async (req, res, next) => {
     }
 }
 
+// 关注话题 put " /user/followTopic/:id"
+exports.followTopic = async (req, res, next) => {
+    try {
+        //  使用 token 的用户_id 去关注 params传入的id
+        // 1.获取userData 
+        let userId = req.userData._id
+        const user = await User.findById(userId.toString()).select("+followingTopic")
+        console.log(userId);
+        console.log(user);
+
+        // 2.如果关注过了，直接return
+        if (user.followingTopic.map(id => id.toString()).includes(req.params.id)) {
+            return res.status(400).json({
+                code: 400,
+                msg: "已关注 关注失败"
+            })
+        }
+        console.log(req.params.id);
+
+        // 3.如果没有关注，我们再关注
+        user.followingTopic.push(req.params.id)
+        await user.save()
+        res.status(200).json({
+            code: 200,
+            msg: `关注成功`,
+            data: user
+        })
+
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+// 取消关关注话题 delete "/following/:id"
+exports.unfollowTopic = async (req, res, next) => {
+    try {
+        //1. 拿到token解析后的id
+        const userId = req.userData._id
+        //2. 查询 token 解析后 id 的粉丝集合
+        const user = await User.findById(userId.toString()).select("+followingTopic")
+        //3. 获取所关注的用户索引
+        const index = user.followingTopic.map(id => id.toString()).indexOf(req.params.id)
+
+        if (index == -1) {
+            return res.status(400).json({
+                code: 400,
+                msg: "未关注 取消关注失败"
+            })
+        }
+        // 4.已经关注，就取消操作
+        const cancel = user.followingTopic.splice(index, 1)
+        await user.save()
+        res.status(200).json({
+            code: 200,
+            msg: "取消关注成功",
+            data: cancel
+        })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+// 获取用户关注话题的列表
+exports.followersList = async (req, res, next) => {
+    try {
+   
+        let userId = req.params.id
+
+    // 2.获取用户所有的关注话题
+    const topicList = await User.findById(userId).select("+followingTopic").populate("followingTopic")
+    console.log(topicList);
+    if (!topicList) {
+        // 获取失败
+        return res.status(400).json({
+            msg: "用户目前没有关注话题",
+            code: 400
+        })
+    }
+    // 获取成功返回
+    res.status(200).json({
+        code: 200,
+        msg: "查询成功",
+        data: topicList
+    })
+    } catch (error) {
+        next(error)
+    }
+}

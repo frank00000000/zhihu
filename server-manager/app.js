@@ -29,7 +29,7 @@ class App {
         // this.server.use(morgan('dev'))
         
         // 静态资源托管
-          this.server.use(express.static("public"))
+        this.server.use(express.static("public"))
 
         // 引入数据库
         require('./model')

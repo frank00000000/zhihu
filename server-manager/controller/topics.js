@@ -1,5 +1,5 @@
 // 话题module
-const { TopicModel } = require('../model/toppics')
+const { TopicModel } = require('../model/topics')
 
 // 获取话题模块列表 get /topics/
 exports.getTopicsList = async (req, res, next) => {
@@ -19,7 +19,6 @@ exports.getTopicsList = async (req, res, next) => {
             // 实现模糊搜索功能
             name:new RegExp(req.query.keyword)
         }).limit(PageSize).skip(currentPage * page_size)
-        console.log("topicList =" + topicList);
         // 2.获取长度为空 返回失败
         if (!topicList.length) return res.status(400).json({
             code: 400,

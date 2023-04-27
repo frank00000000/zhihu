@@ -100,6 +100,13 @@ const userSchema = new mongoose.Schema({
             ref: "User"
         }],
         select: false
+    },
+    // 关注与粉丝 话题部分
+    followingTopic: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId
+        }],
+        select: false
     }
 })
 
@@ -190,11 +197,20 @@ function userValidator(data) {
         // 关注模块
         following: Joi.array().items(
             Joi.object().keys({
-                type: Joi.objectId()
+                type:Joi.objectId()
             })
         ).messages({
             "array.base": "following 必须为数组类型",
-        })
+        }),
+
+        // 粉丝话题模块
+        followingTopic: Joi.array().items(
+            Joi.object().keys({
+                type: Joi.objectId()
+            })
+        ).messages({
+            "array.base": "followingTopic 必须为数组类型",
+        }),
     })
     return schema.validate(data)
 }

@@ -7,8 +7,10 @@ const validator = require("../middleware/validate")
 const user = require("../controller/user")
 // 引入auth jwt 验证中间件(是否携带jwt)
 const authMid = require("../middleware/auth")
-// 引入check 鉴权中间件(用户是否登录状态)
+// 引入check User的id是否存在
 const checkUseExited = require("../middleware/checkUseExited")
+// 引入check  Topic的id是否存在
+const checkTopicExited = require('../middleware/checkTopicExited');
 
 // 注册用户 validator(userValidator) 数据校验
 router.post("/", validator(userValidator), user.register)
@@ -28,5 +30,11 @@ router.put("/following/:id", [authMid, checkUseExited], user.follow)
 router.delete("/following/:id", [authMid, checkUseExited], user.unfollow)
 // 获取某用户的粉丝
 router.get("/:id/followers", user.listFollowers)
+// 关注话题
+router.put("/followingTopic/:id", [authMid, checkTopicExited], user.followTopic)
+// 取消关注话题
+router.delete("/followingTopic/:id", [authMid, checkTopicExited],user.unfollowTopic)
+// 获取用户关注话题的列表
+router.get("/:id/followingTopicList",user.followersList)
 
 module.exports = router

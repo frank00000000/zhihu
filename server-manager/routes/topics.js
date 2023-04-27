@@ -5,7 +5,7 @@ const topic = require('../controller/topics')
 const auth = require("../middleware/auth")
 // 引入校验
 const validator = require("../middleware/validate")
-const {topicValidator} = require("../model/toppics")
+const {topicValidator} = require("../model/topics")
 
 // 获取话题列表
 router.get('/',topic.getTopicsList)
