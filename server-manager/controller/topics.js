@@ -15,7 +15,10 @@ exports.getTopicsList = async (req, res, next) => {
 
         // 模块功能的实现
         //1.查询所有话题列表 limit:显示条数 skip：跳过条数
-        const topicList = await TopicModel.find().limit(PageSize).skip(currentPage * page_size)
+        const topicList = await TopicModel.find({
+            // 实现模糊搜索功能
+            name:new RegExp(req.query.keyword)
+        }).limit(PageSize).skip(currentPage * page_size)
         console.log("topicList =" + topicList);
         // 2.获取长度为空 返回失败
         if (!topicList.length) return res.status(400).json({
