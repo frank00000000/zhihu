@@ -4,15 +4,18 @@ const { TopicModel } = require('../model/toppics')
 // 获取话题模块列表 get /topics/
 exports.getTopicsList = async (req, res, next) => {
     // 分页器功能实现 
-    //  1.获取当前页数,转换成number类型.当前页数最小为 1
-     const page = Math.Max( req.query.page * 1,1)
+    //  1.获取当前页数,转换成number类型.当前页数最小为 0
+    const currentPage = Math.max(Math.floor(req.query.currentPage * 1), 1) - 1
 
+    // 2.每条页面的有几条数据,不传每页条数默认为 5 
+    const { PageSize = 5 } = req.query
+    const page_size = Math.max(Math.floor(PageSize * 1), 1)
 
     try {
-       
+
         // 模块功能的实现
         //1.查询所有话题列表 limit:显示条数 skip：跳过条数
-        const topicList = await TopicModel.find().limit(3)
+        const topicList = await TopicModel.find().limit(PageSize).skip(currentPage * page_size)
         console.log("topicList =" + topicList);
         // 2.获取长度为空 返回失败
         if (!topicList.length) return res.status(400).json({
