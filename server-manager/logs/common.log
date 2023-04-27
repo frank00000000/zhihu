@@ -26,3 +26,7 @@
 [2023-04-27T15:47:31.848] [ERROR] error - Cannot read properties of undefined (reading 'map')
 [2023-04-27T17:03:19.517] [ERROR] error - Cast to ObjectId failed for value "644409d68fb27bcf057beec" (type string) at path "_id" for model "User"
 [2023-04-27T17:04:48.437] [ERROR] error - Cast to ObjectId failed for value "644409d68fb27bcf057fbee" (type string) at path "_id" for model "User"
+[2023-04-27T19:41:55.758] [ERROR] error - User is not defined
+[2023-04-27T19:42:31.608] [ERROR] error - User is not defined
+[2023-04-27T19:43:20.425] [ERROR] error - User is not defined
+[2023-04-27T19:45:34.965] [ERROR] error - User is not defined

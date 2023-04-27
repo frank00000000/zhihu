@@ -1,5 +1,6 @@
 // 话题module
 const { TopicModel } = require('../model/topics')
+const { User } = require("../model/user")
 
 // 获取话题模块列表 get /topics/
 exports.getTopicsList = async (req, res, next) => {
@@ -17,7 +18,7 @@ exports.getTopicsList = async (req, res, next) => {
         //1.查询所有话题列表 limit:显示条数 skip：跳过条数
         const topicList = await TopicModel.find({
             // 实现模糊搜索功能
-            name:new RegExp(req.query.keyword)
+            name: new RegExp(req.query.keyword)
         }).limit(PageSize).skip(currentPage * page_size)
         // 2.获取长度为空 返回失败
         if (!topicList.length) return res.status(400).json({
@@ -112,5 +113,27 @@ exports.updateTopic = async (req, res, next) => {
 
     } catch (err) {
         next(err)
+    }
+}
+
+// 粉丝话题 get /topics/:id/followers
+exports.listTopicFollowers = async (req, res, next) => {
+    try {
+
+        // 获取话题粉丝
+        const users = await User.find({ followingTopic: req.params.id })
+        if (!users) return res.status(400).json({
+            code: 400,
+            msg: "获取粉丝话题失败",
+        })
+
+        res.status(200).json({
+            code: 200,
+            msg: "获取粉丝话题成功",
+            data: users
+        })
+
+    } catch (error) {
+        next(error)
     }
 }
