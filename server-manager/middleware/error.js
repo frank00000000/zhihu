@@ -9,6 +9,9 @@ module.exports = (err, req, res, next) => {
         code: 500,
         msg: "服务器错误!",
     })
+
+    console.log(err);
+
     // 服务器端打印错误
     log4js.error(err.message)
 }

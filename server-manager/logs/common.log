@@ -30,3 +30,10 @@
 [2023-04-27T19:42:31.608] [ERROR] error - User is not defined
 [2023-04-27T19:43:20.425] [ERROR] error - User is not defined
 [2023-04-27T19:45:34.965] [ERROR] error - User is not defined
+[2023-04-28T15:04:30.724] [ERROR] error - Cannot apply rules to empty ruleset
+[2023-04-28T15:06:03.168] [ERROR] error - Cannot apply rules to empty ruleset
+[2023-04-28T15:13:26.835] [ERROR] error - Unexpected token } in JSON at position 30
+[2023-04-28T15:14:35.195] [ERROR] error - Unexpected token } in JSON at position 30
+[2023-04-28T15:15:25.618] [ERROR] error - Unexpected token } in JSON at position 30
+[2023-04-28T15:15:37.682] [ERROR] error - Unexpected token } in JSON at position 30
+[2023-04-28T15:49:35.834] [ERROR] error - Unexpected token } in JSON at position 24

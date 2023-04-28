@@ -12,6 +12,8 @@ router.use("/upload", require("./upload"))
 // 话题模块接口
 router.use("/topics", require("./topics"))
 
+// 问题模块接口
+router.use("/questions",require("./questions"))
 
 module.exports = router
 

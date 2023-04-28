@@ -3,8 +3,7 @@ const mongoose = require("mongoose")
 
 // 引入Joi
 const Joi = require("joi")
-const { string } = require("joi")
-Joi.objectId = require("Joi-ob")
+Joi.objectId = require("joi-objectid")(Joi)
 
 const questionSchema = new mongoose.Schema({
     // 版本信息
@@ -13,18 +12,20 @@ const questionSchema = new mongoose.Schema({
         // 隐藏版本信息 __V
         select: false
     },
-    title:{
-        type:String,
-        required:true
+    // 问题
+    title: {
+        type: String,
+        required: true
     },
-    description:{
-        type:String,
+    description: {
+        type: String,
     },
-    questioner:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
-        require:true,
-        select:false
+    // user用户id
+    questioner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        require: true,
+        select: false
 
     }
 })
@@ -33,17 +34,17 @@ const questionSchema = new mongoose.Schema({
 // 创建Model
 const QuestionModel = mongoose.model("Question", questionSchema)
 
-function userValidator(data) {
+function QuestionValidator(data) {
     const schema = Joi.object({
 
-        title:Joi.string().messages({
-            "string.base":"title只能是string类型"
+        title: Joi.string().messages({
+            "string.base": "title只能是string类型"
         }),
-        description:Joi.string().message({
-            "string.base":"description只能是string类型"
+        description: Joi.string().messages({
+            "string.base": "description只能是string类型"
         }),
-        questioner:Joi.string().message({
-            "string.base":"questioner只能是string类型"
+        questioner: Joi.string().messages({
+            "string.base": "questioner只能是string类型"
         })
     })
     return schema.validate(data)
@@ -52,5 +53,5 @@ function userValidator(data) {
 // 导出
 module.exports = {
     QuestionModel,
-    userValidator
+    QuestionValidator
 }

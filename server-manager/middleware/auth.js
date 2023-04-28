@@ -20,10 +20,10 @@ if(!token){
 
   try {
     // 3.验证token 当token存在的时候，验证是否有效
-    const userDate = jwt.verify(token,config.secret)
+    const userData = jwt.verify(token,config.secret)
 
     // 验证后的token 放到req上
-    req.userData = userDate
+    req.userData = userData
 
     next()
   } catch (error) {
