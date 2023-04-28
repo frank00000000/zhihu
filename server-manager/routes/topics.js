@@ -21,4 +21,6 @@ router.post("/", [auth, validator(topicValidator)], topic.createTopic)
 router.patch("/:id", [auth, validator(topicValidator)], topic.updateTopic)
 // 粉丝话题模块
 router.get("/:id/followers", topic.listTopicFollowers)
+// 话题的问题列表
+router.get("/:id/questions", checkTopicExited, topic.listQuestions)
 module.exports = router

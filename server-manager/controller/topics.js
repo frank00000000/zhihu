@@ -1,6 +1,7 @@
 // 话题module
 const { TopicModel } = require('../model/topics')
 const { User } = require("../model/user")
+const { QuestionModel } = require("../model/questions")
 
 // 获取话题模块列表 get /topics/
 exports.getTopicsList = async (req, res, next) => {
@@ -132,6 +133,30 @@ exports.listTopicFollowers = async (req, res, next) => {
             msg: "获取粉丝话题成功",
             data: users
         })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+// 话题的问题列表
+exports.listQuestions = async (req, res, next) => {
+    try {
+        const questionList = await QuestionModel.find({ topics: req.params.id })
+        console.log(questionList);
+
+        if (!questionList) {
+            return res.status(400).json({
+                msg: "列表查找失败",
+                code: 400
+            })
+        }
+        res.status(200).json({
+            msg: "列表查找成功",
+            code: 200,
+            data: questionList
+        })
+
 
     } catch (error) {
         next(error)
