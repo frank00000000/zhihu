@@ -1,6 +1,8 @@
 
 // 引入 User 数据库
 const { User } = require("../model/user")
+// 映入 Questions 数据库
+const { QuestionModel } = require("../model/questions")
 // 引入 bcrypt 加密数据
 const bcrypt = require('bcrypt');
 
@@ -347,26 +349,52 @@ exports.unfollowTopic = async (req, res, next) => {
 // 获取用户关注话题的列表
 exports.followersList = async (req, res, next) => {
     try {
-   
+
         let userId = req.params.id
 
-    // 2.获取用户所有的关注话题
-    const topicList = await User.findById(userId).select("+followingTopic").populate("followingTopic")
-    console.log(topicList);
-    if (!topicList) {
-        // 获取失败
-        return res.status(400).json({
-            msg: "用户目前没有关注话题",
-            code: 400
+        // 2.获取用户所有的关注话题
+        const topicList = await User.findById(userId).select("+followingTopic").populate("followingTopic")
+        console.log(topicList);
+        if (!topicList) {
+            // 获取失败
+            return res.status(400).json({
+                msg: "用户目前没有关注话题",
+                code: 400
+            })
+        }
+        // 获取成功返回
+        res.status(200).json({
+            code: 200,
+            msg: "查询成功",
+            data: topicList
         })
-    }
-    // 获取成功返回
-    res.status(200).json({
-        code: 200,
-        msg: "查询成功",
-        data: topicList
-    })
     } catch (error) {
         next(error)
     }
 }
+
+
+// 用户的问题列表
+exports.listQuestions = async (req, res, next) => {
+    try {
+
+        // 获取用户的问题
+        const questionList = await QuestionModel.find({ questioner: req.params.id })
+
+        if (!questionList) {
+            res.status(400).json({
+                code: 400,
+                msg: "查询失败"
+            })
+        }
+        res.status(200).json({
+            code: 200,
+            msg: "查询成功",
+            data: questionList
+        })
+
+    } catch (error) {
+        next(error)
+    }
+}
+

@@ -9,7 +9,7 @@ exports.getTopicsList = async (req, res, next) => {
     const currentPage = Math.max(Math.floor(req.query.currentPage * 1), 1) - 1
 
     // 2.每条页面的有几条数据,不传每页条数默认为 5 
-    const { PageSize = 5 } = req.query
+    const { PageSize = 10 } = req.query
     const page_size = Math.max(Math.floor(PageSize * 1), 1)
 
     try {

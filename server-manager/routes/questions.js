@@ -21,7 +21,7 @@ router.post("/", [auth, validator(QuestionValidator)], question.createQuestion)
 // 修改问题
 router.patch("/:id", [auth, validator(QuestionValidator), checkQuestionsExited, checkQuestioner], question.updateQuestion)
 // 删除问题
-router.delete("/:id", [auth, validator(QuestionValidator),checkQuestioner, checkQuestionsExited], question.deleteQuestion)
+router.delete("/:id", [auth,checkQuestioner, checkQuestionsExited], question.deleteQuestion)
 
 
 module.exports = router

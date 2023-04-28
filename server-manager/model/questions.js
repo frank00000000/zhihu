@@ -17,6 +17,7 @@ const questionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    // 问题描述
     description: {
         type: String,
     },
@@ -26,13 +27,22 @@ const questionSchema = new mongoose.Schema({
         ref: "User",
         require: true,
         select: false
+    },
 
+    topics: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Topic"
+        }],
+        select: false
     }
 })
 
 
 // 创建Model
 const QuestionModel = mongoose.model("Question", questionSchema)
+
+
 
 function QuestionValidator(data) {
     const schema = Joi.object({
@@ -45,6 +55,11 @@ function QuestionValidator(data) {
         }),
         questioner: Joi.string().messages({
             "string.base": "questioner只能是string类型"
+        }),
+        topics:Joi.array().items(Joi.objectId()).messages({
+            "array.base": "locations 必须是 array 数组",
+            "string.pattern.name": "数组中必须传入 objectId 类型",
+
         })
     })
     return schema.validate(data)

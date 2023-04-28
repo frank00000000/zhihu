@@ -7,7 +7,7 @@ exports.getQuestionsList = async (req, res, next) => {
     const currentPage = Math.max(Math.floor(req.query.currentPage * 1), 1) - 1
 
     // 2.每条页面的有几条数据,不传每页条数默认为 5 
-    const { PageSize = 5 } = req.query
+    const { PageSize = 10 } = req.query
     const page_size = Math.max(Math.floor(PageSize * 1), 1)
 
     try {
@@ -20,7 +20,7 @@ exports.getQuestionsList = async (req, res, next) => {
             {
                 $or: [{ title: keyword }, { description: keyword }]
             }
-        ).limit(PageSize).skip(currentPage * page_size).select("+questioner")
+        ).limit(PageSize).skip(currentPage * page_size)
         // 2.获取长度为空 返回失败
         if (!questionsList.length) return res.status(400).json({
             code: 400,
@@ -42,10 +42,10 @@ exports.getQuestion = async (req, res, next) => {
     //1.获取指定查询 话题名字
     const { fields = "" } = req.query
 
-    const selectFields = fields.split(";").filter(f => f).map(f => ` +${f}`).join("")
+    const selectFields = fields.split(";").filter(field => field).map(field => ` +${field}`).join("")
     try {
         // 1.获取指定话题传入的id，显示 selectFields 话题id ，携带作者 questioner
-        const question = await QuestionModel.findById(req.params.id).select(selectFields).populate("questioner")
+        const question = await QuestionModel.findById(req.params.id).select(selectFields).populate("questioner topics")
         if (!question) {
             return res.status(400).json({
                 code: 400,

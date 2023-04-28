@@ -37,3 +37,7 @@
 [2023-04-28T15:15:25.618] [ERROR] error - Unexpected token } in JSON at position 30
 [2023-04-28T15:15:37.682] [ERROR] error - Unexpected token } in JSON at position 30
 [2023-04-28T15:49:35.834] [ERROR] error - Unexpected token } in JSON at position 24
+[2023-04-28T23:20:41.820] [ERROR] error - log is not defined
+[2023-04-28T23:21:04.213] [ERROR] error - Cast to ObjectId failed for value "{ questioner: '644409d68fb27bcf057fbeec' }" (type Object) at path "_id" for model "Question"
+[2023-04-28T23:23:10.170] [ERROR] error - req.status is not a function
+[2023-04-28T23:44:00.600] [ERROR] error - Cannot apply rules to empty ruleset or the last rule added does not support rule properties

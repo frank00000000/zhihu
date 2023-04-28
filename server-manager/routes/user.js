@@ -36,5 +36,6 @@ router.put("/followingTopic/:id", [authMid, checkTopicExited], user.followTopic)
 router.delete("/followingTopic/:id", [authMid, checkTopicExited],user.unfollowTopic)
 // 获取用户关注话题的列表
 router.get("/:id/followingTopicList",user.followersList)
-
+// 用户的问题列表
+router.get("/:id/questionsList",user.listQuestions)
 module.exports = router
