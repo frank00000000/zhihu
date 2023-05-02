@@ -3,6 +3,10 @@
 const { User } = require("../model/user")
 // 映入 Questions 数据库
 const { QuestionModel } = require("../model/questions")
+// 引入 answers 数据库
+const { answersModel } = require("../model/answers")
+
+
 // 引入 bcrypt 加密数据
 const bcrypt = require('bcrypt');
 
@@ -398,3 +402,163 @@ exports.listQuestions = async (req, res, next) => {
     }
 }
 
+/* 
+    点赞模块
+*/
+// 点赞
+exports.likeAnswer = async (req, res, next) => {
+    try {
+        //  使用 token 的用户_id 去关注 params传入的id
+        // 1.获取userData 
+        let userId = req.userData._id
+        const user = await User.findById(userId.toString()).select("+likingAnswers")
+        console.log(user);
+        // 2.如果没有点赞，则点赞。如果点踩了取消点踩
+        if (!user.likingAnswers.map(id => id.toString()).includes(req.params.id)) {
+            user.likingAnswers.push(req.params.id)
+            await user.save()
+            const result = await answersModel.findByIdAndUpdate(req.params.id, { $inc: { voteCount: 1 } })
+        }
+        next()
+        res.status(200).json({
+            code: 200,
+            msg: `点赞成功`,
+            data: user
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+// 取消点赞
+exports.unlikeAnswer = async (req, res, next) => {
+    try {
+        //1. 拿到token解析后的id
+        const userId = req.userData._id
+        //2. 查询 token 解析后 id 的粉丝集合
+        const user = await User.findById(userId.toString()).select("+likingAnswers")
+        //3. 获取点赞的用户索引
+        const index = user.likingAnswers.map(id => id.toString()).indexOf(req.params.id)
+        if (index > -1) {
+            // 4.没有点赞就点赞
+            const cancel = user.likingAnswers.splice(index, 1)
+            await user.save()
+            await answersModel.findByIdAndUpdate(req.params.id, { $inc: { voteCount: -1 } })
+
+        }
+        res.status(200).json({
+            code: 200,
+            msg: "取消点赞成功",
+        })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+// 点赞列表
+exports.likeAnswerList = async (req, res, next) => {
+    try {
+        let userId = req.params.id
+        // 2.获取问题中所有点赞
+        const likingList = await User.findById(userId).select("+likingAnswers").populate("likingAnswers")
+        console.log(likingList);
+        if (!likingList) {
+            // 获取失败
+            return res.status(400).json({
+                msg: "查询失败",
+                code: 400
+            })
+        }
+        // 获取成功返回
+        res.status(200).json({
+            code: 200,
+            msg: "查询成功",
+            data: likingList
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+/* 
+    踩模块
+*/
+
+
+// 点踩
+exports.dislikeAnswer = async (req, res, next) => {
+    try {
+        //  使用 token 的用户_id 去关注 params传入的id
+        // 1.获取userData 
+        let userId = req.userData._id
+        const user = await User.findById(userId.toString()).select("+dislikingAnswers")
+        // 2.如果没有点赞，则点赞
+        if (!user.dislikingAnswers.map(id => id.toString()).includes(req.params.id)) {
+            user.dislikingAnswers.push(req.params.id)
+            await user.save()
+            res.status(200).json({
+                code: 200,
+                msg: `点踩成功`,
+                data: user
+            })
+        }
+
+        next()
+    } catch (error) {
+        next(error)
+    }
+}
+
+// 取消点踩
+exports.unDisLikeAnswer = async (req, res, next) => {
+    try {
+        //1. 拿到token解析后的id
+        const userId = req.userData._id
+        //2. 查询 token 解析后 id 的粉丝集合
+        const user = await User.findById(userId.toString()).select("+dislikingAnswers")
+        //3. 获取所关注的用户索引
+        const index = user.dislikingAnswers.map(id => id.toString()).indexOf(req.params.id)
+
+        if (index > -1) {
+            // 4.已经关注，就取消操作
+            const cancel = user.dislikingAnswers.splice(index, 1)
+            console.log(cancel);
+            await user.save()
+        }
+
+        res.status(200).json({
+            code: 200,
+            msg: "取消点踩成功",
+        })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+// 点踩列表
+exports.disLikeAnswerList = async (req, res, next) => {
+    try {
+
+        let userId = req.params.id
+
+        // 2.获取用户所有的关注话题
+        const dislikingAnswersList = await User.findById(userId).select("+dislikingAnswers").populate("dislikingAnswers")
+        if (!dislikingAnswersList) {
+            // 获取失败
+            return res.status(400).json({
+                msg: "查询失败",
+                code: 400
+            })
+        }
+        // 获取成功返回
+        res.status(200).json({
+            code: 200,
+            msg: "查询成功",
+            data: dislikingAnswersList
+        })
+    } catch (error) {
+        next(error)
+    }
+}

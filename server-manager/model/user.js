@@ -104,10 +104,28 @@ const userSchema = new mongoose.Schema({
     // 关注与粉丝 话题部分
     followingTopic: {
         type: [{
-            type: mongoose.Schema.Types.ObjectId
+            type: mongoose.Schema.Types.ObjectId,
+        }],
+        select: false
+    },
+    // 关注
+    likingAnswers: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Answer"
+        }],
+        select: false
+    },
+    // 取消
+    dislikingAnswers: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Answer"
         }],
         select: false
     }
+
+
 })
 
 // 封装生成 token 功能
@@ -197,7 +215,7 @@ function userValidator(data) {
         // 关注模块
         following: Joi.array().items(
             Joi.object().keys({
-                type:Joi.objectId()
+                type: Joi.objectId()
             })
         ).messages({
             "array.base": "following 必须为数组类型",
@@ -211,6 +229,7 @@ function userValidator(data) {
         ).messages({
             "array.base": "followingTopic 必须为数组类型",
         }),
+
     })
     return schema.validate(data)
 }

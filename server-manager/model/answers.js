@@ -26,10 +26,10 @@ const answerSchema = new mongoose.Schema({
     questionId: {
         type: String
     },
-    voteCount:{
-        type:Number,
-        default:0,
-        required:true
+    voteCount: {
+        type: Number,
+        default: 0,
+        required: true
     }
 })
 
@@ -38,7 +38,6 @@ const answersModel = mongoose.model("Answer", answerSchema)
 
 function answersValidator(data) {
     const schema = Joi.object({
-
         content: Joi.string().messages({
             "string.base": "content只能是string类型"
         }),
@@ -49,9 +48,13 @@ function answersValidator(data) {
             "string.base": "questionId只能是string类型"
         }),
 
-        topics:Joi.array().items(Joi.objectId())
-
-
+        topics: Joi.array().items(Joi.objectId()).messages({
+            "array.base": "locations 必须是 array 数组",
+            "string.pattern.name": "数组中必须传入 objectId 类型",
+        }),
+        voteCount:Joi.number().messages({
+            "number.base":"voteCount 必须是number类型"
+        })
     })
     return schema.validate(data)
 }

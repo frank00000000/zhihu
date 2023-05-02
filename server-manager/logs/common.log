@@ -41,3 +41,10 @@
 [2023-04-28T23:21:04.213] [ERROR] error - Cast to ObjectId failed for value "{ questioner: '644409d68fb27bcf057fbeec' }" (type Object) at path "_id" for model "Question"
 [2023-04-28T23:23:10.170] [ERROR] error - req.status is not a function
 [2023-04-28T23:44:00.600] [ERROR] error - Cannot apply rules to empty ruleset or the last rule added does not support rule properties
+[2023-05-02T10:54:54.382] [ERROR] error - topicList is not defined
+[2023-05-02T10:55:57.576] [ERROR] error - topicList is not defined
+[2023-05-02T11:06:17.880] [ERROR] error - cancel is not defined
+[2023-05-02T11:44:13.302] [ERROR] error - likingList is not defined
+[2023-05-02T11:44:23.917] [ERROR] error - likingList is not defined
+[2023-05-02T11:45:23.272] [ERROR] error - cancel is not defined
+[2023-05-02T14:49:20.707] [ERROR] error - unDisLikeAnswer is not defined

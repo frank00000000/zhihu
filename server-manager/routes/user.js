@@ -12,6 +12,11 @@ const checkUseExited = require("../middleware/checkUseExited")
 // 引入check  Topic的id是否存在
 const checkTopicExited = require('../middleware/checkTopicExited');
 
+// 引入check  checkAnswerer鉴权 
+const checkAnswerer = require('../middleware/checkAnswerer')
+// 引入check  checkAnswerer的答案是否存在
+const checkAnswerExist = require('../middleware/checkAnswerExist');
+
 // 注册用户 validator(userValidator) 数据校验
 router.post("/", validator(userValidator), user.register)
 // 获取所有用户
@@ -38,4 +43,17 @@ router.delete("/followingTopic/:id", [authMid, checkTopicExited],user.unfollowTo
 router.get("/:id/followingTopicList",user.followersList)
 // 用户的问题列表
 router.get("/:id/questionsList",user.listQuestions)
+// 用户点赞
+router.put("/likingAnswers/:id",[authMid,checkAnswerExist],user.likeAnswer,user.dislikeAnswer)
+// 取消点赞
+router.delete("/likingAnswers/:id",[authMid,checkAnswerExist],user.unlikeAnswer)
+// 点赞列表
+router.get("/:id/likingAnswers",user.likeAnswerList)
+// 用户点踩
+router.put("/dislikingAnswers/:id",[authMid,checkAnswerExist],user.dislikeAnswer,user.unlikeAnswer)
+// 取消点踩
+router.delete("/dislikingAnswers/:id",[authMid,checkAnswerExist],user.unDisLikeAnswer)
+// 点踩列表
+router.get("/:id/dislikingAnswers",user.disLikeAnswerList)
+
 module.exports = router
