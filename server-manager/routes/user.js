@@ -55,5 +55,16 @@ router.put("/dislikingAnswers/:id",[authMid,checkAnswerExist],user.dislikeAnswer
 router.delete("/dislikingAnswers/:id",[authMid,checkAnswerExist],user.unDisLikeAnswer)
 // 点踩列表
 router.get("/:id/dislikingAnswers",user.disLikeAnswerList)
+// 收藏
+router.put("/collectingAnswer/:id",[authMid,checkAnswerExist],user.collectingAnswer)
+
+// 取消收藏
+router.delete("/collectingAnswer/:id",[authMid,checkAnswerExist],user.unCollectingAnswer)
+
+// 收藏列表
+router.get("/:id/collectingAnswer",authMid,user.collectingAnswerList)
+
+
+
 
 module.exports = router

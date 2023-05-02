@@ -11,7 +11,7 @@ module.exports = async (req,res,next) =>{
     }
 
     // 问题的答案不存在 返回问题下没有答案
-    if(answersId.questionId !== req.params.questionId){
+    if( req.params.questionId && answersId.questionId !== req.params.questionId){
         return res.status(404).json({
         code:404,
         msg:"该问题下没有答案"    

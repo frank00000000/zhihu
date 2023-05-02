@@ -123,7 +123,16 @@ const userSchema = new mongoose.Schema({
             ref: "Answer"
         }],
         select: false
+    },
+     // 收藏答案
+     collectingAnswers: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Answer"
+        }],
+        select: false
     }
+    
 
 
 })
