@@ -10,9 +10,6 @@ const validator = require("../middleware/validate")
 
 // 引入路由接口
 const answer = require("../controller/answers")
-
-
-
 // 获取答案列表
 router.get("/", answer.getAnswersList)
 // 获取指定答案

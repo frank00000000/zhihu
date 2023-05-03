@@ -18,5 +18,7 @@ router.use("/questions",require("./questions"))
 // 答案模块接口
 router.use("/questions/:questionId/answers",require("./answer"))
 
+// 评论模块接口
+router.use("/questions/:questionId/answers/:answerId/comments",require("./comments"))
 module.exports = router
 

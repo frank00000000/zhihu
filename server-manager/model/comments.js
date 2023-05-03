@@ -22,12 +22,24 @@ const commentSchema = new mongoose.Schema({
         require: true,
         select: false
     },
+    // 问题id
     questionId: {
         type: String
     },
+    // 答案id
     answerId: {
         type: String
+    },
+    // 二级评论
+    rootCommentId: {
+        type: String,
+    },
+    replyTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }
+},{
+    timestamps:true
 })
 
 // 创建Model
@@ -46,7 +58,15 @@ function commentValidator(data) {
         }),
         answerId: Joi.string().messages({
             "string.base": "questionId 必须是 string 类型"
+        }),
+
+        rootCommentId: Joi.string().messages({
+            "string.base": "rootCommentId 必须是 string 类型"
+        }),
+        replyTo: Joi.objectId().messages({
+            "objectId.base": "replyTo 必须是 objectId 类型",
         })
+
     })
     return schema.validate(data)
 }
