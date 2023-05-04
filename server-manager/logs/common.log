@@ -50,3 +50,6 @@
 [2023-05-02T14:49:20.707] [ERROR] error - unDisLikeAnswer is not defined
 [2023-05-02T23:45:11.927] [ERROR] error - Cannot populate path `collectingAnswer` because it is not in your schema. Set the `strictPopulate` option to false to override.
 [2023-05-03T21:45:50.599] [ERROR] error - Unexpected token } in JSON at position 26
+[2023-05-04T16:22:46.923] [ERROR] error - Cannot access 'data' before initialization
+[2023-05-04T16:23:00.096] [ERROR] error - Cannot access 'data' before initialization
+[2023-05-04T16:24:26.995] [ERROR] error - Cannot access 'data' before initialization
