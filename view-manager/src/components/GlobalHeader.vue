@@ -13,8 +13,18 @@
           </li>
         </ul>
         <ul v-else class="list-inline mb-0">
-          <li class="list-inline-item">
-            <dropdown :title="`你好! ${user.name}`"></dropdown>
+          <li class="list-inline-item">  
+            <dropdown :title="`你好! ${user.name}`">
+              <DropdownItem>
+                <a href="#" class="dropdown-item">新建文章</a>
+              </DropdownItem>
+              <dropdown-item disabled>
+                <a href="#" class="dropdown-item">编辑资料</a>
+              </dropdown-item>
+              <DropdownItem>
+                <a href="#" class="dropdown-item">退出登录</a>
+              </DropdownItem>
+            </dropdown>
           </li>
         </ul>
       </div>
@@ -25,7 +35,7 @@
 <script lang="ts">
 import { ref, reactive, defineComponent, PropType } from "vue";
 import Dropdown from "./Dropdown.vue";
-
+import DropdownItem from "./DropdownItem.vue";
 // 导航栏类型
 export interface UserProps {
   isLogin: boolean;
@@ -41,6 +51,6 @@ export default defineComponent({
       required: true,
     },
   },
-  components: { Dropdown },
+  components: { Dropdown, DropdownItem },
 });
 </script>

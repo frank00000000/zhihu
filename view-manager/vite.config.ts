@@ -6,11 +6,10 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   resolve: {
-    alias: [
-      {
-        find: "@",
-        replacement: resolve(__dirname, './src')
-      }
-    ]
-  }
+    extensions: ['.mjs', '.js', ".vue",'.ts', '.jsx', '.tsx', '.json'],
+    alias: {
+      "@": resolve(__dirname, './src')
+    },
+  },
+
 })
