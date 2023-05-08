@@ -1,13 +1,18 @@
 <style scoped></style>
-
 <template>
   <div class="validate-input-container pb-3">
-    <input 
-    type="text"
-    class="form-control"
-    v-model="inputRef.val"
-    @blur="validateInput"
-    >
+    <input
+      class="form-control"
+      :class="{ 'is-invalid': inputRef.error }"
+      :value="inputRef.val"
+      @blur="validateInput"
+      @input="updateValue"
+      v-bind="$attrs"
+    />
+
+    <span v-if="inputRef.error" class="invalid-feedback"
+      >{{ inputRef.message }}
+    </span>
   </div>
 </template>
 
@@ -15,35 +20,68 @@
 import { ref, reactive, defineComponent, PropType } from "vue";
 // 表单验证正则
 const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-
- interface RuleProp {
+interface RuleProp {
   type: "required" | "email";
   message: string;
-
 }
 
 export type RulesProp = RuleProp[];
-
 export default defineComponent({
   props: {
     rules: Array as PropType<RulesProp>,
-    
+    modelValue: String,
   },
-  setup() {
+  // 父组件传过来的属性不会放到跟组件上
+  inheritAttrs: false,
+  setup(props, context) {
+    console.log(context.attrs);
+
+    // 需要校验的数据
     const inputRef = reactive({
-        val:'',
-        error:false,
-        message:''
-    })
-    const validateInput = () =>{
+      // 校验input显示的是父组件传入的值或者为空
+      val: props.modelValue || "",
+      error: false,
+      message: "",
+    });
 
-    }
+    //v-model请求
+    const updateValue = (e: Event) => {
+      const targetValue = (e.target as HTMLInputElement).value;
+      inputRef.val = targetValue;
+      // 派发表单更新请求
+      context.emit("update:modelValue", targetValue);
+    };
+
+    // 输入框校验
+    const validateInput = () => {
+      if (props.rules) {
+        const allPassed = props.rules.every((rule) => {
+          // 给定值通过，没有校验也通过
+          let passed = true;
+          // 获取校验的错误信息
+          inputRef.message = rule.message;
+
+          // 根据校验类型给数据校验，不满足校验结果给passed赋值为false
+          switch (rule.type) {
+            case "required":
+              passed = inputRef.val.trim() !== "";
+              break;
+            case "email":
+              passed = emailReg.test(inputRef.val);
+              break;
+          }
+          // 如果校验中不满足校验结果 返回false
+          return passed;
+        });
+
+        inputRef.error = !allPassed;
+      }
+    };
     return {
-        inputRef,
-        validateInput
-    }
-
-
+      inputRef,
+      validateInput,
+      updateValue,
+    };
   },
 });
 </script>
