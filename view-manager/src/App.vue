@@ -2,7 +2,7 @@
 <template>
   <div class="container">
     <global-header :user="globalUser"></global-header>
-    <validate-form>
+    <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
         <validate-input
@@ -10,7 +10,7 @@
           v-model="emailVal"
           placeholder="请输入邮箱地址"
           type="text"
-          
+          ref="validateInpRef"
         ></validate-input>
       </div>
       <div class="mb-3">
@@ -73,7 +73,6 @@ const NavData: UserProps = {
   isLogin: true,
   name: "张三",
 };
-
 export default defineComponent({
   name: "App",
   components: {
@@ -83,11 +82,8 @@ export default defineComponent({
     ValidateForm,
   },
   setup() {
-    let obj = {
-      name: "张三",
-      age: 22,
-    };
-
+   
+    let validateInpRef = ref<any>("");
     const emailVal = ref("viking");
 
     // 校验
@@ -99,12 +95,19 @@ export default defineComponent({
       { type: "required", message: "输入密码不能为空" },
     ];
 
+    const onFormSubmit = (result: Function) => {
+      console.log("123", result());
+      console.log(validateInpRef.value.validateInput());
+    };
+
     return {
       list: ColumnData,
       globalUser: NavData,
       emailRules,
       emailVal,
       passwordRules,
+      onFormSubmit,
+      validateInpRef,
     };
   },
 });

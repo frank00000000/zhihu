@@ -18,13 +18,12 @@
 </template>
 
 <script lang="ts">
-import { ref, reactive, defineComponent, PropType } from "vue";
+import { ref, reactive,defineProps, defineComponent, PropType } from "vue";
 // 表单验证正则
 const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
 interface RuleProp {
   type: "required" | "email";
   message: String;
-  [key: string]: any;
 }
 export type RulesProp = RuleProp[];
 
@@ -57,7 +56,9 @@ export default defineComponent({
     };
     // 输入框校验
     const validateInput = () => {
+      // 组件要是传进校验类型和消息，则进行校验。没有传入校验类型，返回 true 不进行校验
       if (props.rules) {
+        // 检验的数组
         const allPassed = props.rules.every((rule) => {
           // 给定值通过，没有校验也通过
           let passed = true;
@@ -78,9 +79,10 @@ export default defineComponent({
           // 如果校验中不满足校验结果 返回false
           return passed;
         });
-
         inputRef.error = !allPassed;
+        return allPassed;
       }
+      return true;
     };
     return {
       inputRef,
