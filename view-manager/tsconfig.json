@@ -1,26 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES5",
-    "useDefineForClassFields": true,
+    "target": "ES6",
+    // "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
+    // "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@/*":["src/*"]
     },
 
     /* Bundler mode */
+    "sourceMap": true,
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
+    // "resolveJsonModule": true,
+    // "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve",
+    // "jsx": "preserve",
 
     /* Linting */
-    "strict": true,
+    "strict": false,
     // "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    // "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

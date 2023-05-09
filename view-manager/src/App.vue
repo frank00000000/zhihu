@@ -2,30 +2,30 @@
 <template>
   <div class="container">
     <global-header :user="globalUser"></global-header>
-    <form>
+    <validate-form>
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
         <validate-input
           :rules="emailRules"
           v-model="emailVal"
-          class="hello there"
           placeholder="请输入邮箱地址"
           type="text"
+          
         ></validate-input>
       </div>
       <div class="mb-3">
         <label class="form-label">密 码</label>
-        <validate-input
-          :rules="emailRules"
+        <ValidateInput
+          :rules="passwordRules"
           v-model="emailVal"
-          class="hello there"
-          placeholder="请输入密码"
           type="password"
-        ></validate-input>
+        ></ValidateInput>
       </div>
 
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+      <template v-slot:submit>
+        <span class="btn btn-danger">提交</span>
+      </template>
+    </validate-form>
   </div>
 </template>
 <script lang="ts">
@@ -35,7 +35,9 @@ import ColumnList, { ColumnProps } from "@/components/ColumnList.vue";
 // 引入导航栏
 import GlobalHeader, { UserProps } from "@/components/GlobalHeader.vue";
 // 引入校验
-import validateInput, { RulesProp } from "@/components/ValidateInput.vue";
+import ValidateInput, { RulesProp } from "@/components/ValidateInput.vue";
+// 引入按钮
+import ValidateForm from "./components/ValidateForm.vue";
 
 // 表单验证正则
 const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
@@ -77,9 +79,15 @@ export default defineComponent({
   components: {
     ColumnList,
     GlobalHeader,
-    validateInput,
+    ValidateInput,
+    ValidateForm,
   },
   setup() {
+    let obj = {
+      name: "张三",
+      age: 22,
+    };
+
     const emailVal = ref("viking");
 
     // 校验
@@ -87,13 +95,16 @@ export default defineComponent({
       { type: "required", message: "电子邮箱地址不能为空" },
       { type: "email", message: "请输入正确的电子邮箱格式" },
     ];
-   
-  
+    const passwordRules: RulesProp = [
+      { type: "required", message: "输入密码不能为空" },
+    ];
+
     return {
       list: ColumnData,
       globalUser: NavData,
       emailRules,
       emailVal,
+      passwordRules,
     };
   },
 });
