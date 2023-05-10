@@ -96,12 +96,17 @@ const validateInput = () => {
   return true;
 };
 
+// 清空当前input框
+const emptyInputRefVal =()=>{
+  inputRef.val = ""
+}
+
 onMounted(() => {
   Instance?.proxy?.$Bus.emit("form-item-created",validateInput);
 });
 
 defineExpose({
   validateInput,
-  inputRef
+  emptyInputRefVal
 });
 </script>
