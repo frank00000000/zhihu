@@ -33,13 +33,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import {
-  ref,
-  reactive,
-  useAttrs,
-  onMounted,
-  getCurrentInstance,
-} from "vue";
+import { ref, reactive, useAttrs, onMounted, getCurrentInstance } from "vue";
 // 表单验证正则
 const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
 const Instance = getCurrentInstance();
@@ -95,13 +89,17 @@ const validateInput = () => {
   }
   return true;
 };
+// 清空当前input框
+const emptyInputRefVal = () => {
+  inputRef.val = "";
+};
 
 onMounted(() => {
-  Instance?.proxy?.$Bus.emit("form-item-created",validateInput);
+  Instance?.proxy?.$Bus.emit("form-item-created", validateInput);
 });
 
 defineExpose({
   validateInput,
-  inputRef
+  emptyInputRefVal
 });
 </script>

@@ -96,7 +96,7 @@ let PasswordRef = ref<InstanceType<typeof ValidateInput>>();
 // 提交btn
 const onFormSubmit = (result: boolean) => {
   if (!result) {
-    // EmailRef?.value?.inputRef.val = ""
+    PasswordRef?.value?.emptyInputRefVal()
   }
 };
 </script>
