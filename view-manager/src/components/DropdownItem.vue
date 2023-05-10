@@ -7,21 +7,21 @@
 </style>
 <template>
   <div>
-    <li class="dropdown-option" :class="{ 'is-disabled': disabled }">
+    <li class="dropdown-option" :class="{ 'is-disabled':disabled }">
       <slot></slot>
     </li>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ref, reactive, defineComponent } from "vue";
 
-export default defineComponent({
-  props: {
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
-});
+const props = withDefaults(
+  defineProps<{
+    disabled: boolean;
+  }>(),
+  {
+    disabled: false,
+  }
+);
 </script>
