@@ -20,7 +20,7 @@ import {
   getCurrentInstance,
 } from "vue";
 // 获取当前vue实例
-const Instance = getCurrentInstance();
+const Instance = getCurrentInstance() as any;
 
 // 派发表单提交emit
 const emit = defineEmits<{
@@ -48,9 +48,9 @@ const callback = (cb: ValidateFunc) => {
   funArr.push(cb);
 };
 
-Instance?.proxy?.$Bus.on("form-item-created", callback as any);
+Instance?.proxy?.$Bus.on("form-item-created", callback );
 onUnmounted(() => {
-  Instance?.proxy?.$Bus.off("form-item-created", callback as any);
+  Instance?.proxy?.$Bus.off("form-item-created", callback );
   funArr = [];
 }),
   onMounted(() => {});

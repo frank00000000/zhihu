@@ -23,7 +23,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   ref,
   reactive,
@@ -31,37 +31,25 @@ import {
   onMounted,
   onUnmounted,
   watch,
+  defineProps,
 } from "vue";
 import useClickOutside from "../hooks/useClickOutside";
-export default defineComponent({
-  name: "Dropdown",
-  props: {
-    title: {
-      type: String,
-      require: true,
-    },
-  },
-  setup() {
-    // 控制下拉框显示与隐藏
-    const isOpen = ref(false);
-    const dropdownRef = ref<null | HTMLElement>(null);
-    // 点击 toggleOpen 按钮后，显示与隐藏取反
-    const toggleOpen = () => {
-      isOpen.value = !isOpen.value;
-    };
-    // hook方法 判断注册 DOM 点击元素是否为列表子元素
-    const isOut = useClickOutside(dropdownRef);
-    watch(isOut, () => {
-      if (isOpen.value && isOut.value) {
-        isOpen.value = false;
-      }
-    });
 
-    return {
-      isOpen,
-      toggleOpen,
-      dropdownRef,
-    };
-  },
+defineProps<{
+  title: String;
+}>();
+// 控制下拉框显示与隐藏
+const isOpen = ref(false);
+const dropdownRef = ref<null | HTMLElement>(null);
+// 点击 toggleOpen 按钮后，显示与隐藏取反
+const toggleOpen = () => {
+  isOpen.value = !isOpen.value;
+};
+// hook方法 判断注册 DOM 点击元素是否为列表子元素
+const isOut = useClickOutside(dropdownRef);
+watch(isOut, () => {
+  if (isOpen.value && isOut.value) {
+    isOpen.value = false;
+  }
 });
 </script>

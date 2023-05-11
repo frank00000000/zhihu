@@ -36,7 +36,8 @@ export default {
 import { ref, reactive, useAttrs, onMounted, getCurrentInstance } from "vue";
 // 表单验证正则
 const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-const Instance = getCurrentInstance();
+
+const Instance = getCurrentInstance() as any;
 
 const props = defineProps<{
   rules: RulesProp;
@@ -100,6 +101,6 @@ onMounted(() => {
 
 defineExpose({
   validateInput,
-  emptyInputRefVal
+  emptyInputRefVal,
 });
 </script>

@@ -8,7 +8,12 @@
         <a class="navbar-brand" href="#">LXH zhifu</a>
         <ul v-if="!user.isLogin" class="list-inline mb-0">
           <li class="list-inline-item">
-            <a href="#" class="btn btn-outline-light my-2">登录</a>
+            <router-link
+              to="/login"  
+              class="btn btn-outline-light my-2"
+              style="margin-right: 16px"
+              >登录</router-link
+            >
             <a href="#" class="btn btn-outline-light my-2">注册</a>
           </li>
         </ul>
@@ -51,7 +56,6 @@ import Dropdown from "./Dropdown.vue";
 import DropdownItem from "./DropdownItem.vue";
 
 defineProps<{
-  user:UserProps
-}>()
-
+  user: UserProps;
+}>();
 </script>
